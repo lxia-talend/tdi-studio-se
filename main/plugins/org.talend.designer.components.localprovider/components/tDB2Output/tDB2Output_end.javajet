@@ -92,8 +92,8 @@ imports="
     	<%
     	}else {
     	%>
-    	PrintSQLException printSQLException_<%=cid%>= new PrintSQLException(e);
-       	printSQLException_<%=cid%>.printSQLException();
+    	String errormessage = printSQLException_<%=cid%>.getSQLException(e);
+        System.err.println(errormessage);
     	int countSum_<%=cid%> = 0;
 		for(int countEach_<%=cid%>: e.getUpdateCounts()) {
 			countSum_<%=cid%> += (countEach_<%=cid%> < 0 ? 0 : countEach_<%=cid%>);
@@ -111,7 +111,7 @@ imports="
     	    deletedCount_<%=cid%> += countSum_<%=cid%>;
     	<%
     	}
-    	dbLog.logPrintedException("printSQLException_"+cid+".getMessage()");
+    	dbLog.logPrintedException("errormessage");
     	}%>
 	}
     <%
@@ -141,9 +141,11 @@ imports="
     %>
     <%@ include file="../templates/DB/Output/DBOutputEndGlobalVars.javajet"%>
     } catch (java.sql.SQLException e) {
-       PrintSQLException printSQLException_<%=cid%>= new PrintSQLException(e);
-       printSQLException_<%=cid%>.printSQLException();
-       <%dbLog.logPrintedException("printSQLException_"+cid+".getMessage()");%>
+       String errormessage = printSQLException_<%=cid%>.getSQLException(e);
+       System.err.println(errormessage);
+       <%
+       dbLog.logPrintedException("errormessage");
+       %>
        throw e;
    }
 

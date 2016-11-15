@@ -56,53 +56,26 @@ boolean useBatch = useBatchSize && (rejectConnName == null)
               ("INSERT").equals(dataAction) || ("UPDATE").equals(dataAction) || ("DELETE").equals(dataAction)
             );
 %>
-class PrintSQLException{
-	private java.lang.StringBuilder fullErrorMessage = new java.lang.StringBuilder();
-	private java.sql.SQLException ex;
-	
-	public PrintSQLException(java.sql.SQLException ex){
-	this.ex = ex;
-	    	for (java.lang.Throwable e : ex) {
+class PrintSQLException_<%=cid%>{
+	public String getSQLException(java.sql.SQLException ex) {
+		StringBuilder fullErrorMessage = new java.lang.StringBuilder();
+    	for (Throwable e : ex) {
         	if (e instanceof java.sql.SQLException) {
-
-                fullErrorMessage.append( "SQLState: " +((java.sql.SQLException)e).getSQLState()+'\n');
+                fullErrorMessage.append("SQLState: " +((java.sql.SQLException)e).getSQLState()+'\n');
                 fullErrorMessage.append("Error Code: " +((java.sql.SQLException)e).getErrorCode()+'\n');
                 fullErrorMessage.append("Message: " + e.getMessage());
-
-                java.lang.Throwable t = ex.getCause();
+                Throwable t = ex.getCause();
                 while(t != null) {
+                    System.err.println("Cause: " + t);
                     fullErrorMessage .append("Cause: " + t);
                     t = t.getCause();
                 }
         	}
     	}
-	}
-	
-	public String getMessage(){
-	return this.fullErrorMessage.toString();
-	}
-
-	public void printSQLException() {
-    	for (java.lang.Throwable e : ex) {
-        	if (e instanceof java.sql.SQLException) {
-
-                System.err.println("SQLState: " +
-                ((java.sql.SQLException)e).getSQLState());
-
-                System.err.println("Error Code: " +
-                ((java.sql.SQLException)e).getErrorCode());
-
-                System.err.println("Message: " + e.getMessage());
-
-                java.lang.Throwable t = ex.getCause();
-                while(t != null) {
-                    System.err.println("Cause: " + t);
-                    t = t.getCause();
-                }
-        	}
-    	}
+    	return fullErrorMessage.toString();
 	}
 }
+PrintSQLException_<%=cid%> printSQLException_<%=cid%> = new PrintSQLException_<%=cid%>();
 try{
 <%
 getManager(dbmsId, cid, node);
