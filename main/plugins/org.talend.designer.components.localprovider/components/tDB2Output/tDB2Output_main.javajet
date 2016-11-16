@@ -1190,16 +1190,15 @@ skeleton="../templates/db_output_bulk.skeleton"
             	    	}%>
             	    	batchSizeCounter_<%=cid%> = 0;
                 }catch (java.sql.BatchUpdateException e){
+                	
                 	<%if(("true").equals(dieOnError)) {
                 	%>
                 		throw(e);
                 	<%
                 	}else {
                 	%>
-
-                	String errormessage = printSQLException_<%=cid%>.getSQLException(e);
-                	System.err.println(errormessage);
-                	
+                	String errormessage_<%=cid%> = printSQLException_<%=cid%>.getSQLException(e);
+        			System.err.println(errormessage_<%=cid%>);
                 	int countSum_<%=cid%> = 0;
 					for(int countEach_<%=cid%>: e.getUpdateCounts()) {
 						countSum_<%=cid%> += (countEach_<%=cid%> < 0 ? 0 : countEach_<%=cid%>);
@@ -1218,7 +1217,7 @@ skeleton="../templates/db_output_bulk.skeleton"
 			    	<%
 			    	}
 
-			    	dbLog.logPrintedException("errormessage");
+			    	dbLog.logPrintedException("errormessage_"+cid);
                 	}%>
                 }
     			}
@@ -1257,15 +1256,15 @@ skeleton="../templates/db_output_bulk.skeleton"
             	    	<%
             	    	}%>
                 }catch (java.sql.BatchUpdateException e){
+                	
                 	<%if(("true").equals(dieOnError)) {
                 	%>
 						throw(e);
                 	<%
                 	}else {
                 	%>
-
-                	    String errormessage = printSQLException_<%=cid%>.getSQLException(e);
-                		System.err.println(errormessage);
+                		String errormessage_<%=cid%> = printSQLException_<%=cid%>.getSQLException(e);
+        				System.err.println(errormessage_<%=cid%>);
                 		int countSum_<%=cid%> = 0;
 						for(int countEach_<%=cid%>: e.getUpdateCounts()) {
 							countSum_<%=cid%> += (countEach_<%=cid%> < 0 ? 0 : countEach_<%=cid%>);
@@ -1283,8 +1282,7 @@ skeleton="../templates/db_output_bulk.skeleton"
             	    	    deletedCount_<%=cid%> += countSum_<%=cid%>;
             	    	<%
             	    	}
-
-            	    	dbLog.logPrintedException("errormessage");
+            	    	dbLog.logPrintedException("errormessage_"+cid);
                 	}%>
                 }
                 }
