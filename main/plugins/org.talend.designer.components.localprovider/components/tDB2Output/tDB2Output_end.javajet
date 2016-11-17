@@ -92,9 +92,7 @@ imports="
     	<%
     	}else {
     	%>
-    	String errormessage_<%=cid%> = printSQLException_<%=cid%>.getSQLException(e);
-        System.err.println(errormessage_<%=cid%>);
-    	
+    	String errormessage_<%=cid%> = printSQLException_<%=cid%>.getSQLException(e,false);
     	int countSum_<%=cid%> = 0;
 		for(int countEach_<%=cid%>: e.getUpdateCounts()) {
 			countSum_<%=cid%> += (countEach_<%=cid%> < 0 ? 0 : countEach_<%=cid%>);
@@ -141,16 +139,20 @@ imports="
 	}
     %>
     } catch (java.sql.SQLException e) {
-       String errormessage_<%=cid%> = printSQLException_<%=cid%>.getSQLException(e);
-       System.err.println(errormessage_<%=cid%>);
-       <%
-       dbLog.logPrintedException("errormessage_"+cid);
-       %>
+       
+       
        <%
        		if(("true").equals(dieOnError)) {
        %>
-						throw(e);
+           String errormessage_<%=cid%> = printSQLException_<%=cid%>.getSQLException(e,true);
+           System.err.println(errormessage_<%=cid%>);
+           throw(e);
        <%
+            }else{
+       %>
+            String errormessage_<%=cid%> = printSQLException_<%=cid%>.getSQLException(e,false);
+       <%
+            dbLog.logPrintedException("errormessage_"+cid);
             }
        %>
    }

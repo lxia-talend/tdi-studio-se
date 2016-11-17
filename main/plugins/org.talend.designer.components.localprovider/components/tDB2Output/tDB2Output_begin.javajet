@@ -57,9 +57,13 @@ boolean useBatch = useBatchSize && (rejectConnName == null)
             );
 %>
 class PrintSQLException_<%=cid%>{
-	public String getSQLException(java.sql.SQLException ex) {
+	public String getSQLException(java.sql.SQLException ex,boolean skipFirst) {
 		StringBuilder fullErrorMessage = new java.lang.StringBuilder();
     	for (Throwable e : ex) {
+    		if(skipFirst){
+    		    skipFirst=false;
+    		    continue;
+    		}
         	if (e instanceof java.sql.SQLException) {
                 fullErrorMessage.append("SQLState: " +((java.sql.SQLException)e).getSQLState()+'\n');
                 fullErrorMessage.append("Error Code: " +((java.sql.SQLException)e).getErrorCode()+'\n');
