@@ -230,6 +230,8 @@ public class MarketoRestClient {
                     return listObject.getId();
                 }
             }
+        }else if(!getResponse.isSuccess()){
+        	throw new Exception(getResponse.getErrors().toString());
         }
         return null;
     }
