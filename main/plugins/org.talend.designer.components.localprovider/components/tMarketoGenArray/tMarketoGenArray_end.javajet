@@ -34,16 +34,17 @@
 				<%
 				if(segmentSize > 0){
 				%>
-					int arrayCount_<%=cid%>=0;
-					while(true){
-						if(tmpBatch_<%=cid %>.size() > <%=segmentSize%>*(arrayCount_<%=cid%>+1)){
-							leadKeyValues_<%=cid %>.add(tmpBatch_<%=cid %>.subList(<%=segmentSize%>*arrayCount_<%=cid%>,<%=segmentSize%>*(arrayCount_<%=cid%>+1)).toArray(new String[<%=segmentSize%>]));
-							arrayCount_<%=cid%>++;
-						}else{
-							leadKeyValues_<%=cid %>.add(tmpBatch_<%=cid %>.subList(<%=segmentSize%>*arrayCount_<%=cid%>,tmpBatch_<%=cid %>.size()).toArray(new String[tmpBatch_<%=cid %>.size()-<%=segmentSize%>*arrayCount_<%=cid%>]));
-							break;
-						}
-					}
+							int count_<%=cid%> = 0,start_<%=cid%> = 0,end_<%=cid%> = 0;
+		                    for (String string : tmpBatch_<%=cid %>) {
+			                    count_<%=cid%> += java.net.URLEncoder.encode(string).length();
+			                    end_<%=cid%>++;
+			                    if(count_<%=cid%>>20){
+				                    leadKeyValues_<%=cid %>.add(tmpBatch_<%=cid %>.subList(start_<%=cid%>, end_<%=cid%>-1).toArray(new String[end_<%=cid%>-start_<%=cid%>-1]));
+				                    start_<%=cid%> = end_<%=cid%>-1;
+				                    count_<%=cid%>=java.net.URLEncoder.encode(string).length();
+			                    }
+		                    }
+		                   leadKeyValues_<%=cid %>.add(tmpBatch_<%=cid %>.subList(start_<%=cid %>, tmpBatch_<%=cid %>.size()).toArray(new String[tmpBatch_<%=cid %>.size()-start_<%=cid%>]));
 				<%
 				}else{
 				%>
